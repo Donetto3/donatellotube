@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Mosy</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+    }
+
+    header {
+      background: #202020;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ff0000;
+    }
+
+    .search-bar input {
+      width: 300px;
+      padding: 6px 10px;
+      font-size: 16px;
+    }
+
+    main {
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .video-card {
+      width: 320px;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .video-card:hover {
+      transform: scale(1.02);
+    }
+
+    .video-card img {
+      width: 100%;
+      height: auto;
+    }
+
+    .video-info {
+      padding: 10px;
+    }
+
+    .video-info h4 {
+      margin: 5px 0;
+      font-size: 16px;
+    }
+
+    .video-info p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .player-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 40px auto;
+    }
+
+    iframe {
+      width: 100%;
+      height: 450px;
+      border: none;
+      border-radius: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">DonatelloTube</div>
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Поиск видео...">
+  </div>
+</header>
+
+<main id="video-list">
+  <!-- Видео-карточки будут вставлены здесь -->
+</main>
+
+<div class="player-container" id="player" style="display: none;">
+  <iframe id="videoPlayer" src="" allowfullscreen></iframe>
+</div>
+
+<script>
+  const videos = [
+    {
+      id: 'dQw4w9WgXcQ',
+      title: ' МОЙ ВИДЕОХОСТИНГ',
+      author: 'Создатель 2005',
+      thumbnail: '//www.youtube.com/watch?v=GyH0z0pE8QA'
+    },
+    {
+      id: '3JZ_D3ELwOQ',
+      title: 'Я СДЕЛАЛ ЭТО',
+      author: 'Спасибо нейронкам',
+      thumbnail: 'https://www.youtube.com/watch?v=GyH0z0pE8QA'
+    },
+    {
+      id: 'oHg5SJYRHA0',
+      title: 'ДОБРОЕ УТРО?',
+      author: 'Кирилл',
+      thumbnail: 'https://www.youtube.com/watch?v=GyH0z0pE8QA'
+    }
+  ];
+
+  const videoList = document.getElementById('video-list');
+  const player = document.getElementById('player');
+  const videoPlayer = document.getElementById('videoPlayer');
+  const searchInput = document.getElementById('search');
+
+  function renderVideos(filter = "") {
+    videoList.innerHTML = '';
+    const filtered = videos.filter(v =>
+      v.title.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    filtered.forEach(video => {
+      const card = document.createElement('div');
+      card.className = 'video-card';
+      card.innerHTML = `
+        <img src="${video.thumbnail}" alt="thumbnail">
+        <div class="video-info">
+          <h4>${video.title}</h4>
+          <p>${video.author}</p>
+        </div>
+      `;
+      card.addEventListener('click', () => {
+        player.style.display = 'block';
+        videoPlayer.src = `https://www.youtube.com/watch?v=GyH0z0pE8QA${video.id}?autoplay=1`;
+        window.scrollTo({ top: player.offsetTop, behavior: 'smooth' });
+      });
+      videoList.appendChild(card);
+    });
+
+    if (filtered.length === 0) {
+      videoList.innerHTML = '<p>Видео не найдено.</p>';
+    }
+  }
+
+  searchInput.addEventListener('input', () => {
+    renderVideos(searchInput.value);
+  });
+
+  renderVideos();
+</script>
+
+</body>
+</html>
